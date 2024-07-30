@@ -10,17 +10,18 @@ def app():
     yield
     stop_application()
 
-    with open('webcalculator.log', 'w') as file:
-        file.write(get_log_content())
+
+def test_state_clear(app):
+    response = send_request(TEST_HOST, TEST_PORT, 'state')
+    # The strings in the response are not Latin
+    assert response == {'statusCode': 0, 'state': 'OK'}
 
 
-def test_state(app):
+def test_state_with_fixed_response(app):
     response = send_request(TEST_HOST, TEST_PORT, 'state')
     # Test can be passed with this:
     assert response['statusCode'] == 0
     assert response['state'].lower().replace('о', 'o').replace('к', 'k') == 'ok'
-    # The strings in the response are not Latin
-    # assert response == {'statusCode': 0, 'state': 'OK'}
 
 
 def test_default_start():
@@ -29,8 +30,6 @@ def test_default_start():
     # Test can be passed with this:
     assert response['statusCode'] == 0
     assert response['state'].lower().replace('о', 'o').replace('к', 'k') == 'ok'
-    # The strings in the response are not Latin
-    # assert response == {'statusCode': 0, 'state': 'OK'}
     stop_application()
 
 
@@ -47,8 +46,6 @@ def test_custom_host_and_port():
     # Test can be passed with this:
     assert response['statusCode'] == 0
     assert response['state'].lower().replace('о', 'o').replace('к', 'k') == 'ok'
-    # The strings in the response are not Latin
-    # assert response == {'statusCode': 0, 'state': 'OК'}
     stop_application()
 
 
